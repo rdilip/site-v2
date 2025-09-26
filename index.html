@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohit Dilip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.5;
+            color: #000;
+            background: #fefcfb;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        header {
+            border-bottom: 1px solid #f0ede9;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #000;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: color 0.2s;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #000;
+        }
+
+        .intro {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid #f0ede9;
+            background: #fff;
+        }
+
+        .intro-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro h1 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
+        }
+
+        .intro .subtitle {
+            font-size: 0.95rem;
+            color: #000;
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .intro .subtitle a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .intro .subtitle a:hover {
+            color: #1d4ed8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .social-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+        }
+
+        .social-links a:hover {
+            color: #000;
+        }
+
+        .social-links a.github:hover {
+            color: #333;
+        }
+
+        .social-links a.linkedin:hover {
+            color: #0077b5;
+        }
+
+        .social-links a.google-scholar:hover {
+            color: #4285f4;
+        }
+
+        .social-links a.twitter:hover {
+            color: #000;
+        }
+
+        .social-links a.email:hover {
+            color: #ea4335;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #f8f6f4;
+            border: 1px solid #f0ede9;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .section {
+            padding: 2rem 0;
+        }
+
+        .section:not(:last-child) {
+            border-bottom: 1px solid #f0ede9;
+        }
+
+        .section h2 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 1.2rem;
+            letter-spacing: -0.01em;
+        }
+
+        .about {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #000;
+            max-width: 650px;
+            font-weight: 400;
+        }
+
+        .papers {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .paper {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f8f6f4;
+        }
+
+        .paper:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .paper h3 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .paper h3 a {
+            color: #2563eb;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .paper h3 a:hover {
+            color: #1d4ed8;
+        }
+
+        .paper .authors {
+            font-size: 0.85rem;
+            color: #000;
+            margin-bottom: 0.2rem;
+            font-weight: 400;
+        }
+
+        .paper .venue {
+            font-size: 0.8rem;
+            color: #000;
+            margin-bottom: 0.6rem;
+            font-weight: 400;
+        }
+
+        .paper .description {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #000;
+            font-weight: 400;
+        }
+
+        .blog-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .blog-post {
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f8f6f4;
+        }
+
+        .blog-post:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .blog-post h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #000;
+            margin-bottom: 0.2rem;
+            letter-spacing: -0.01em;
+        }
+
+        .blog-post .date {
+            font-size: 0.8rem;
+            color: #000;
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+        }
+
+        .markdown-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #000;
+            font-weight: 400;
+        }
+
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3 {
+            color: #000;
+            font-weight: 500;
+            margin: 1.2rem 0 0.6rem 0;
+            letter-spacing: -0.01em;
+        }
+
+        .markdown-content h1 { font-size: 1.2rem; }
+        .markdown-content h2 { font-size: 1.1rem; }
+        .markdown-content h3 { font-size: 1rem; }
+
+        .markdown-content p {
+            margin-bottom: 0.8rem;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin: 0.8rem 0;
+            padding-left: 1.2rem;
+        }
+
+        .markdown-content li {
+            margin-bottom: 0.2rem;
+        }
+
+        .markdown-content code {
+            background: #f5f3f1;
+            padding: 0.15rem 0.3rem;
+            border-radius: 3px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.8em;
+        }
+
+        .markdown-content pre {
+            background: #f5f3f1;
+            padding: 0.8rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid #f0ede9;
+        }
+
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .markdown-content blockquote {
+            border-left: 2px solid #ddd;
+            padding-left: 0.8rem;
+            margin: 1rem 0;
+            color: #000;
+        }
+
+        .markdown-content strong {
+            font-weight: 500;
+            color: #000;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 2rem 0;
+        }
+
+        footer {
+            border-top: 1px solid #f0ede9;
+            padding: 1.5rem 0;
+            margin-top: 1.5rem;
+        }
+
+        footer p {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #000;
+            font-weight: 400;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                gap: 1.2rem;
+            }
+
+            .intro h1 {
+                font-size: 1.4rem;
+            }
+
+            .intro-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.2rem;
+            }
+
+            .profile-photo {
+                order: -1;
+                width: 100px;
+                height: 100px;
+            }
+
+            .section {
+                padding: 1.5rem 0;
+            }
+
+            .social-links {
+                gap: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Rohit Dilip</div>
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showPage('home')" class="active">Research</a></li>
+                    <li><a href="#" onclick="showPage('blog')">Notes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="home" class="page active">
+        <section class="intro">
+            <div class="container">
+                <div class="intro-content">
+                    <div class="intro-text">
+                        <h1>Rohit Dilip</h1>
+                        <div class="subtitle">
+                            I work on generative modeling for biology at Caltech. Recently, I've worked on using <a href="assets/kanzi_all_authors.pdf" target="_blank">flow matching to develop scalable tokenizers</a> and <a href="assets/jovian.pdf" target="_blank">generating new biological structures using autoregressive models</a>. Before grad school, I studied quantum information at TUM and got my bachelor's degree in physics from Princeton.</div>
+                        <div class="social-links">
+                            <a href="https://github.com/rdilip" target="_blank" title="GitHub" class="github">
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                            <a href="https://linkedin.com/in/rohitdilip" target="_blank" title="LinkedIn" class="linkedin">
+                                <i class="fa-brands fa-linkedin"></i>
+                            </a>
+                            <a href="https://twitter.com/rohitdilip8" target="_blank" title="Twitter" class="twitter">
+                                <i class="fa-brands fa-twitter"></i>
+                            </a>
+                            <a href="https://scholar.google.com/citations?user=youruserid" target="_blank" title="Google Scholar" class="google-scholar">
+                                <i class="fa-solid fa-book"></i>
+                            </a>
+                            <a href="mailto:rdilip@caltech.edu" target="_blank" title="Email" class="email">
+                                <i class="fa-solid fa-envelope"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="assets/profile.jpg" title="I promise I am usually smiling." alt="I promise I am usually smiling.">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <h2>Recent Publications</h2>
+                <div class="papers">
+                    <div class="paper">
+                        <h3><a href="assets/kanzi_all_authors.pdf" target="_blank">Kanzi: Flow Autoencoders are Effective Protein Tokenizers</a></h3>
+                        <div class="authors">Rohit Dilip, Evan Zhang, Ayush Varshney, David Van Valen</div>
+                        <div class="venue">Submitted, 2025</div>
+                        <div class="description">
+                            We develop a flow matching based autoencoder for protein structure tokenization. Kanzi outperforms 20x larger models trained on 400x as much data.
+                        </div>
+                    </div>
+                    
+                    <div class="paper">
+                        <h3><a href="assets/jovian.pdf" target="_blank">Jovian: Bidirectional Autoregressive Protein Structure Generation</a></h3>
+                        <div class="authors">Rohit Dilip, Ayush Varshney, Evan Zhang, David Van Valen</div>
+                        <div class="description">
+                            Jovian presents an autoregressive approach to condition generative models on particular substructures.
+                        </div>
+                    </div>
+                    
+                    <div class="paper">
+                        <h3><a href="https://www.biorxiv.org/content/10.1101/2023.11.17.567630v5.full.pdf" target="_blank">CellSAM: A Foundation Model for Cell Segmentation</a></h3>
+                        <div class="authors">Uriah Israel, Markus Marks, Rohit Dilip, Qilin Li, et al.</div>
+                        <div class="venue">Nature Methods, 2025</div>
+                        <div class="description">
+                            CellSAM is a foundation model for cell segmentation.
+                        </div>
+                    </div>
+                    
+                    <div class="paper">
+                        <h3><a href="https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.4.043007" target="_blank">Data compression for quantum machine learning</a></h3>
+                        <div class="authors">Rohit Dilip, Leo Li, Adam Smith, Frank Pollmann</div>
+                        <div class="venue">Physical Review Research, 2023</div>
+                        <div class="description">
+                            We develop a tensor-network based data compression technique specifically for exploitation on low-depth quantum circuits.
+                        </div>
+                    </div>
+                    
+                    <div class="paper">
+                        <h3><a href="https://journals.aps.org/prxquantum/pdf/10.1103/PRXQuantum.2.010342" target="_blank">Real- and imaginary-time evolution with compressed quantum circuits</a></h3>
+                        <div class="authors">ShengHsuan Lin, Rohit Dilip, Adam Smith, Frank Pollmann</div>
+                        <div class="venue">PRX Quantum</div>
+                        <div class="description">
+                            We show that low depth classical simulations of quantum circuits can be used to simulate non-equilibrium quantum dynamics.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="blog" class="page">
+        <section class="section">
+            <div class="container">
+                <h2>Research Notes</h2>
+                
+                <div id="blog-posts" class="blog-posts">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Rohit Dilip</p>
+        </div>
+    </footer>
+
+    <script>
+        // List of blog post files - add your posts here in chronological order (newest first)
+        const blogPosts = [
+            '2025-09-25-computational-biology.html',
+            '2025-09-20-protein-modeling.html',
+            '2025-09-15-foundation-models.html'
+            // Add more blog post filenames here as you create them
+        ];
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        async function loadBlogPosts() {
+            const blogPostsContainer = document.getElementById('blog-posts');
+            blogPostsContainer.innerHTML = ''; // Clear loading message
+            
+            if (blogPosts.length === 0) {
+                blogPostsContainer.innerHTML = '<div class="blog-post"><div class="markdown-content"><p>No posts yet. Check back soon!</p></div></div>';
+                return;
+            }
+
+            for (const postFile of blogPosts) {
+                try {
+                    const response = await fetch(`posts/${postFile}`);
+                    if (response.ok) {
+                        const html = await response.text();
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        
+                        // Extract the blog post content
+                        const blogPost = tempDiv.querySelector('.blog-post') || tempDiv.firstElementChild;
+                        if (blogPost) {
+                            blogPostsContainer.appendChild(blogPost);
+                        }
+                    } else {
+                        console.log(`Could not load ${postFile}: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.log(`Error loading ${postFile}:`, error);
+                }
+            }
+
+            // If no posts were loaded successfully, show a message
+            if (blogPostsContainer.children.length === 0) {
+                blogPostsContainer.innerHTML = '<div class="blog-post"><div class="markdown-content"><p>Posts are being prepared. Check back soon!</p></div></div>';
+            }
+        }
+
+        // Load blog posts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBlogPosts();
+        });
+
+        // Also load posts when switching to the blog page
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Load blog posts when switching to blog page
+            if (pageId === 'blog') {
+                loadBlogPosts();
+            }
+        }
+    </script>
+</body>
+</html>
