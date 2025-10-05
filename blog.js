@@ -273,9 +273,11 @@ async function loadBlogPosts() {
 // ---------------------------
 document.addEventListener('DOMContentLoaded', () => {
   const blogPage = document.getElementById('blog');
-  if (blogPage && blogPage.classList.contains('active')) {
-    loadBlogPosts();
-  }
-  // Optional: preload on home
-  // loadBlogPosts();
+// Bootstrapping (always load on notes.html)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadBlogPosts);
+} else {
+  loadBlogPosts();
+}
+
 });
