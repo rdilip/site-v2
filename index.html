@@ -24,11 +24,68 @@
             letter-spacing: -0.01em;
         }
 
+        .post-title button:hover span.triangle {
+            transform: rotate(90deg);
+        }
+
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
+
+        .post-title button {
+            text-decoration: none;
+        }
+
+        .post-title button:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Blog post hover + expand aesthetic --- */
+
+        /* Compact row: make the title button feel click-ready */
+        .post-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.15rem 0;
+            transition: color 0.2s ease, background 0.2s ease;
+            border-radius: 6px;
+        }
+
+        /* Default text + arrow */
+        .post-toggle span.triangle {
+            color: #666;
+            transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* Hover feedback: soft blue tint + darker text */
+        .post-toggle:hover {
+            color: #1d4ed8;
+            /* slightly deeper blue */
+            background: rgba(37, 99, 235, 0.06);
+        }
+
+        .post-toggle:hover span.triangle {
+            color: #2563eb;
+            transform: translateX(2px);
+        }
+
+        /* Expanded state: blue accent + rotated triangle */
+        .post-toggle[aria-expanded="true"] {
+            color: #1e40af;
+            /* deep blue */
+            font-weight: 500;
+        }
+
+        .post-toggle[aria-expanded="true"] span.triangle {
+            color: #2563eb;
+            transform: rotate(90deg);
+        }
+
+
 
         header {
             border-bottom: 1px solid #f0ede9;
@@ -44,6 +101,11 @@
             align-items: center;
             padding: 0.8rem 0;
         }
+
+        .markdown-content .katex-display {
+            margin: 1rem 0;
+        }
+
 
         .logo {
             font-size: 1rem;
@@ -446,6 +508,15 @@
             /* keep badges a consistent small size */
         }
     </style>
+    <!-- Markdown parser + sanitizer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+    <!-- Your blog logic -->
+    <script src="blog.js" defer></script>
+
 </head>
 
 <body>
@@ -454,8 +525,8 @@
             <nav>
                 <div class="logo">Rohit Dilip</div>
                 <ul class="nav-links">
-                    <li><a href="#" onclick="showPage('home')" class="active">Research</a></li>
-                    <li><a href="#" onclick="showPage('blog')">Notes</a></li>
+                    <li><a href="#" onclick="showPage(event, 'home')" class="active">Research</a></li>
+                    <li><a href="#" onclick="showPage(event, 'blog')">Notes</a></li>
                 </ul>
             </nav>
         </div>
@@ -511,15 +582,16 @@
                         <div class="authors">Rohit Dilip, Evan Zhang, Ayush Varshney, David Van Valen</div>
                         <div class="badge-row">
                             <a href="https://arxiv.org/abs/2510.00351" target="_blank">
-                              <img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv">
+                                <img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv">
                             </a>
                             <a href="https://www.biorxiv.org/content/10.1101/2025.10.01.679645v1" target="_blank">
-                              <img src="https://img.shields.io/badge/bioRxiv-2025.10.01.679645-4caf50.svg" alt="bioRxiv">
+                                <img src="https://img.shields.io/badge/bioRxiv-2025.10.01.679645-4caf50.svg"
+                                    alt="bioRxiv">
                             </a>
                             <a href="https://github.com/rdilip/kanzi" target="_blank">
                                 <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
-                              </a>
-                         </div>
+                            </a>
+                        </div>
                         <div class="description">
                             We develop a flow matching based autoencoder for protein structure tokenization. Kanzi
                             outperforms 20x larger models trained on 400x as much data.
@@ -544,18 +616,20 @@
                         <!-- <div class="venue">Submitted, 2025</div> -->
                         <div class="badge-row">
                             <a href="https://arxiv.org/abs/2311.11004" target="_blank">
-                              <img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv">
+                                <img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv">
                             </a>
                             <a href="https://www.biorxiv.org/content/10.1101/2023.11.17.567630v5" target="_blank">
-                                <img src="https://img.shields.io/badge/bioRxiv-2023.11.17.567630-4caf50.svg" alt="bioRxiv">
-                              </a>
-                              <a href="https://github.com/vanvalenlab/CellSAM" target="_blank">
+                                <img src="https://img.shields.io/badge/bioRxiv-2023.11.17.567630-4caf50.svg"
+                                    alt="bioRxiv">
+                            </a>
+                            <a href="https://github.com/vanvalenlab/CellSAM" target="_blank">
                                 <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
-                              </a>
-                         </div>
- 
+                            </a>
+                        </div>
+
                         <div class="description">
-                            CellSAM is a generalist model for cell segmentation that works across visual modalities, sizes, and shapes.
+                            CellSAM is a generalist model for cell segmentation that works across visual modalities,
+                            sizes, and shapes.
                         </div>
                     </div>
 
@@ -566,16 +640,18 @@
                         <div class="venue">Physical Review Research, 2023</div>
                         <div class="badge-row">
                             <a href="https://arxiv.org/abs/2204.11170" target="_blank">
-                              <img src="https://img.shields.io/badge/arXiv-2204.11170-b31b1b.svg" alt="arXiv">
+                                <img src="https://img.shields.io/badge/arXiv-2204.11170-b31b1b.svg" alt="arXiv">
                             </a>
-                                <a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.4.043007" target="_blank">
-                                  <img src="https://img.shields.io/badge/PhysRevResearch-2023-blue.svg" alt="Physical Review Research">
-                                </a>
-                                <a href="https://github.com/rdilip/qml.git" target="_blank">
-                                  <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
-                                </a>
+                            <a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.4.043007"
+                                target="_blank">
+                                <img src="https://img.shields.io/badge/PhysRevResearch-2023-blue.svg"
+                                    alt="Physical Review Research">
+                            </a>
+                            <a href="https://github.com/rdilip/qml.git" target="_blank">
+                                <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
+                            </a>
 
-                              </div>
+                        </div>
                         <div class="description">
                             We develop a tensor-network based data compression technique specifically for exploitation
                             on low-depth quantum circuits.
@@ -590,12 +666,13 @@
                         <div class="venue">PRX Quantum</div>
                         <div class="badge-row">
                             <a href="https://arxiv.org/abs/2008.10322" target="_blank">
-                              <img src="https://img.shields.io/badge/arXiv-2008.10322-b31b1b.svg" alt="arXiv">
+                                <img src="https://img.shields.io/badge/arXiv-2008.10322-b31b1b.svg" alt="arXiv">
                             </a>
-                            <a href="https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.010342" target="_blank">
-                              <img src="https://img.shields.io/badge/PRXQuantum-2022-blue.svg" alt="PRX Quantum">
+                            <a href="https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.010342"
+                                target="_blank">
+                                <img src="https://img.shields.io/badge/PRXQuantum-2022-blue.svg" alt="PRX Quantum">
                             </a>
-                         </div>
+                        </div>
                         <div class="description">
                             We show that low depth classical simulations of quantum circuits can be used to simulate
                             non-equilibrium quantum dynamics.
@@ -624,84 +701,7 @@
         </div>
     </footer>
 
-    <script>
-        // List of blog post files - add your posts here in chronological order (newest first)
-        const blogPosts = [
-            '2025-09-25-computational-biology.html',
-            '2025-09-20-protein-modeling.html',
-            '2025-09-15-foundation-models.html'
-            // Add more blog post filenames here as you create them
-        ];
 
-        function showPage(pageId) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-
-            document.getElementById(pageId).classList.add('active');
-
-            const navLinks = document.querySelectorAll('.nav-links a');
-            navLinks.forEach(link => link.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        async function loadBlogPosts() {
-            const blogPostsContainer = document.getElementById('blog-posts');
-            blogPostsContainer.innerHTML = ''; // Clear loading message
-
-            if (blogPosts.length === 0) {
-                blogPostsContainer.innerHTML = '<div class="blog-post"><div class="markdown-content"><p>No posts yet. Check back soon!</p></div></div>';
-                return;
-            }
-
-            for (const postFile of blogPosts) {
-                try {
-                    const response = await fetch(`posts/${postFile}`);
-                    if (response.ok) {
-                        const html = await response.text();
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = html;
-
-                        // Extract the blog post content
-                        const blogPost = tempDiv.querySelector('.blog-post') || tempDiv.firstElementChild;
-                        if (blogPost) {
-                            blogPostsContainer.appendChild(blogPost);
-                        }
-                    } else {
-                        console.log(`Could not load ${postFile}: ${response.status}`);
-                    }
-                } catch (error) {
-                    console.log(`Error loading ${postFile}:`, error);
-                }
-            }
-
-            // If no posts were loaded successfully, show a message
-            if (blogPostsContainer.children.length === 0) {
-                blogPostsContainer.innerHTML = '<div class="blog-post"><div class="markdown-content"><p>Posts are being prepared. Check back soon!</p></div></div>';
-            }
-        }
-
-        // Load blog posts when the page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            loadBlogPosts();
-        });
-
-        // Also load posts when switching to the blog page
-        function showPage(pageId) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-
-            document.getElementById(pageId).classList.add('active');
-
-            const navLinks = document.querySelectorAll('.nav-links a');
-            navLinks.forEach(link => link.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Load blog posts when switching to blog page
-            if (pageId === 'blog') {
-                loadBlogPosts();
-            }
-        }
-    </script>
 </body>
 
 </html>
