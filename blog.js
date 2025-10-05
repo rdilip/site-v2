@@ -13,6 +13,7 @@
 // Config: newest-first
 // ---------------------------
 const blogPosts = [
+  '10052025_intro_genbio.md',
   '100425_everything_ode.md',
 ];
 
