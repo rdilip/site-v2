@@ -13,6 +13,7 @@
 // Config: newest-first
 // ---------------------------
 const blogPosts = [
+  '10112025_kabsch.md',
   '10102025_raw_coord_precision.md',
   '10052025_intro_genbio.md',
   '100425_everything_ode.md',
@@ -57,28 +58,9 @@ function parseFrontMatter(md) {
 // If front-matter has title/date, those take precedence.
 // ---------------------------
 function extractTitleAndDateFromBody(mdBody) {
-  let body = mdBody;
-
-  // 1) Title = first H1 '# ...'
-  let title = null;
-  const h1Match = body.match(/^\s*#\s+(.+)\s*$/m);
-  if (h1Match) {
-    title = h1Match[1].trim();
-    // remove that heading line
-    body = body.replace(h1Match[0], '').trim();
-  }
-
-  // 2) Date = next heading (## ... or deeper)
-  let date = null;
-  const hNext = body.match(/^\s*#{2,6}\s+(.+?)\s*$/m);
-  if (hNext) {
-    date = hNext[1].trim();
-    // remove that heading line too (so it doesn't appear in expanded content)
-    body = body.replace(hNext[0], '').trim();
-  }
-
-  return { title, date, body };
+  return { title: null, date: null, body: mdBody };
 }
+
 
 // ---------------------------
 // Math handling: protect display/AMS blocks from Markdown,
