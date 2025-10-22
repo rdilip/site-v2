@@ -13,6 +13,8 @@
 // Config: newest-first
 // ---------------------------
 const blogPosts = [
+  '10212025_gumbel.md',
+  // '10202025_so3.md',
   '10172025_j2.md',
   '10112025_kabsch.md',
   '10102025_raw_coord_precision.md',
@@ -23,14 +25,30 @@ const blogPosts = [
 // ---------------------------
 // Marked config (avoid mangling underscores etc.)
 // ---------------------------
-if (window.marked) {
+// if (window.marked) {
+//   marked.setOptions({
+//     gfm: true,
+//     breaks: false,
+//     mangle: false,
+//     headerIds: false,
+//   });
+// }
+// Highlight.js integration with marked
+if (window.marked && window.hljs) {
   marked.setOptions({
     gfm: true,
     breaks: false,
     mangle: false,
     headerIds: false,
+    highlight: function (code, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        return hljs.highlight(code, { language: lang }).value;
+      }
+      return hljs.highlightAuto(code).value;
+    }
   });
 }
+
 
 // ---------------------------
 // Front matter (YAML-lite)
@@ -216,6 +234,16 @@ async function loadBlogPosts() {
   </div>
 `;
       container.appendChild(post);
+      // After: container.appendChild(post);
+
+      // highlight code blocks inside this post
+      if (window.hljs) {
+        const scope = post.querySelector('.blog-post-content') || post;
+        scope.querySelectorAll('pre code').forEach(block => {
+          hljs.highlightElement(block);
+        });
+      }
+
 
       // Render math
       const scope = post.querySelector('.markdown-content') || post;
@@ -258,11 +286,11 @@ async function loadBlogPosts() {
 // ---------------------------
 document.addEventListener('DOMContentLoaded', () => {
   const blogPage = document.getElementById('blog');
-// Bootstrapping (always load on notes.html)
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadBlogPosts);
-} else {
-  loadBlogPosts();
-}
+  // Bootstrapping (always load on notes.html)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadBlogPosts);
+  } else {
+    loadBlogPosts();
+  }
 
 });
