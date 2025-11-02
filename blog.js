@@ -13,6 +13,7 @@
 // Config: newest-first
 // ---------------------------
 const blogPosts = [
+  '11012025_fdiv.md',
   '10212025_gumbel.md',
   // '10202025_so3.md',
   '10172025_j2.md',
