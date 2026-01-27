@@ -130,6 +130,36 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ---------------------------
+// Link pills: parse "Label | url_or_status, ..." from front matter
+// ---------------------------
+const PILL_ICONS = {
+  'demo':  'fa-solid fa-arrow-up-right-from-square',
+  'paper': 'fa-solid fa-file-lines',
+  'code':  'fa-brands fa-github',
+};
+
+function parseResearchLinks(linksStr) {
+  return linksStr.split(',').map(entry => {
+    const parts = entry.split('|').map(s => s.trim());
+    if (parts.length < 2) return '';
+    const label = parts[0];
+    const target = parts[1];
+    const isUrl = /^https?:\/\//.test(target);
+    const iconClass = PILL_ICONS[label.toLowerCase()] || 'fa-solid fa-link';
+
+    if (isUrl) {
+      return `<a href="${target}" target="_blank" rel="noopener" class="research-pill">
+        <i class="${iconClass}"></i> ${label}
+      </a>`;
+    } else {
+      return `<span class="research-pill disabled">
+        <i class="${iconClass}"></i> ${label} <span class="pill-status">${target}</span>
+      </span>`;
+    }
+  }).join('');
+}
+
+// ---------------------------
 // Individual post view
 // ---------------------------
 async function loadResearchPost(slug) {
@@ -158,6 +188,12 @@ async function loadResearchPost(slug) {
       if (!date) dateEl.style.display = 'none';
     }
     document.title = `${title} — Rohit Dilip`;
+
+    // Render link pills
+    const linksEl = document.getElementById('research-post-links');
+    if (linksEl && meta.links) {
+      linksEl.innerHTML = parseResearchLinks(meta.links);
+    }
 
     // Extract math blocks before markdown parsing
     const { md: mdClean, blocks } = extractBlockMath(body);

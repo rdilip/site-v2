@@ -186,6 +186,57 @@
             border-bottom: 1px solid #e8e4dc;
         }
 
+        /* --- Research link pills --- */
+        .research-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .research-links:empty {
+            display: none;
+        }
+
+        .research-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            border: 1px solid #e8e4dc;
+            background: #f5f2ed;
+            color: #2d2a26;
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .research-pill i {
+            font-size: 0.85rem;
+            color: currentColor;
+        }
+
+        .research-pill:hover {
+            background: #ebe6de;
+            border-color: #d4cfc5;
+            color: #b39567;
+        }
+
+        .research-pill.disabled {
+            color: #a9a196;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .research-pill.disabled .pill-status {
+            font-weight: 400;
+            font-style: italic;
+            font-size: 0.75rem;
+            color: #a9a196;
+        }
+
         /* --- Markdown content --- */
         .markdown-content {
             font-size: 0.9rem;
@@ -414,6 +465,7 @@
                 <a href="research.html" class="back-link">&larr; Back to Research</a>
                 <h1 id="research-post-title" class="research-post-title"></h1>
                 <div id="research-post-date" class="research-post-date"></div>
+                <div id="research-post-links" class="research-links"></div>
                 <div id="research-post-content" class="markdown-content"></div>
             </div>
         </section>
