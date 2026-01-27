@@ -11,7 +11,6 @@
 // Front matter fields: title, date, description
 // ---------------------------
 const researchPosts = [
-  'example_project.md',
   'apt.md'
 ];
 
