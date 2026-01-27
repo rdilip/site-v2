@@ -7,19 +7,22 @@
     <title>Research — Rohit Dilip</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.5;
-            color: #000;
-            background: #fefcfb;
+            line-height: 1.6;
+            color: #2d2a26;
+            background: #faf8f5;
+            background-image:
+                radial-gradient(ellipse at 0% 0%, rgba(196, 167, 125, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 100% 100%, rgba(143, 174, 139, 0.06) 0%, transparent 50%);
             font-size: 15px;
             letter-spacing: -0.01em;
         }
@@ -32,7 +35,7 @@
 
         /* --- Header & Nav --- */
         header {
-            border-bottom: 1px solid #f0ede9;
+            border-bottom: 1px solid #e8e4dc;
             background: #fff;
             position: sticky;
             top: 0;
@@ -49,7 +52,7 @@
         .logo {
             font-size: 1rem;
             font-weight: 500;
-            color: #000;
+            color: #2d2a26;
             letter-spacing: -0.02em;
         }
 
@@ -61,7 +64,7 @@
 
         .nav-links a {
             text-decoration: none;
-            color: #666;
+            color: #7a7267;
             font-size: 0.9rem;
             font-weight: 400;
             transition: color 0.2s;
@@ -70,7 +73,7 @@
 
         .nav-links a:hover,
         .nav-links a.active {
-            color: #000;
+            color: #2d2a26;
         }
 
         /* --- Section --- */
@@ -79,11 +82,12 @@
         }
 
         .section h2 {
-            font-size: 1.1rem;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            font-size: 1.3rem;
             font-weight: 500;
-            color: #000;
+            color: #2d2a26;
             margin-bottom: 1.2rem;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
         }
 
         /* --- Research listing cards --- */
@@ -97,34 +101,37 @@
             display: block;
             text-decoration: none;
             padding: 1.2rem 1.4rem;
-            border: 1px solid #f0ede9;
-            border-radius: 8px;
+            border: 1px solid #e8e4dc;
+            border-radius: 12px;
             background: #fff;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 1px 3px rgba(45, 42, 38, 0.04);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
         }
 
         .research-card:hover {
-            border-color: #dbe3ff;
-            box-shadow: 0 2px 12px rgba(37, 99, 235, 0.06);
+            border-color: #d4cfc5;
+            box-shadow: 0 4px 16px rgba(45, 42, 38, 0.06);
+            transform: translateY(-1px);
         }
 
         .research-card h3 {
-            font-size: 1rem;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            font-size: 1.05rem;
             font-weight: 500;
-            color: #000;
+            color: #2d2a26;
             margin-bottom: 0.25rem;
             letter-spacing: -0.01em;
         }
 
         .research-card-date {
             font-size: 0.8rem;
-            color: #666;
+            color: #7a7267;
             margin-bottom: 0.4rem;
         }
 
         .research-card-desc {
             font-size: 0.9rem;
-            color: #000;
+            color: #4a453e;
             line-height: 1.5;
             margin-bottom: 0.5rem;
             font-weight: 400;
@@ -132,12 +139,17 @@
 
         .research-card-link {
             font-size: 0.85rem;
-            color: #2563eb;
-            font-weight: 400;
+            color: #c4a77d;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .research-card:hover .research-card-link {
+            color: #b39567;
         }
 
         .no-posts {
-            color: #666;
+            color: #7a7267;
             font-size: 0.9rem;
             font-style: italic;
         }
@@ -145,7 +157,7 @@
         /* --- Research post view --- */
         .back-link {
             display: inline-block;
-            color: #666;
+            color: #7a7267;
             text-decoration: none;
             font-size: 0.9rem;
             margin-bottom: 1.5rem;
@@ -153,13 +165,14 @@
         }
 
         .back-link:hover {
-            color: #2563eb;
+            color: #c4a77d;
         }
 
         .research-post-title {
-            font-size: 1.6rem;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            font-size: 1.875rem;
             font-weight: 500;
-            color: #000;
+            color: #2d2a26;
             margin-bottom: 0.3rem;
             letter-spacing: -0.02em;
             line-height: 1.3;
@@ -167,17 +180,17 @@
 
         .research-post-date {
             font-size: 0.85rem;
-            color: #666;
+            color: #7a7267;
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
-            border-bottom: 1px solid #f0ede9;
+            border-bottom: 1px solid #e8e4dc;
         }
 
         /* --- Markdown content --- */
         .markdown-content {
             font-size: 0.9rem;
-            line-height: 1.6;
-            color: #000;
+            line-height: 1.7;
+            color: #2d2a26;
             font-weight: 400;
         }
 
@@ -188,22 +201,23 @@
         .markdown-content h1,
         .markdown-content h2,
         .markdown-content h3 {
-            color: #000;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            color: #2d2a26;
             font-weight: 500;
-            margin: 1.2rem 0 0.6rem 0;
-            letter-spacing: -0.01em;
+            margin: 1.5rem 0 0.6rem 0;
+            letter-spacing: -0.02em;
         }
 
         .markdown-content h1 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .markdown-content h2 {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
         }
 
         .markdown-content h3 {
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
 
         .markdown-content p {
@@ -221,7 +235,7 @@
         }
 
         .markdown-content code {
-            background: #f5f3f1;
+            background: #f5f2ed;
             padding: 0.15rem 0.3rem;
             border-radius: 3px;
             font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
@@ -230,10 +244,10 @@
 
         .markdown-content pre {
             padding: 0.8rem 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow-x: auto;
-            background: #f5f3f1;
-            border: 1px solid #eee;
+            background: #f5f2ed;
+            border: 1px solid #e8e4dc;
             margin: 1rem 0;
         }
 
@@ -243,24 +257,24 @@
             font-family: 'SF Mono', 'Cascadia Code', monospace;
             font-size: 0.85rem;
             line-height: 1.5;
-            border-radius: 6px;
+            border-radius: 0;
         }
 
         .markdown-content blockquote {
-            border-left: 2px solid #ddd;
+            border-left: 2px solid #c4a77d;
             padding-left: 0.8rem;
             margin: 1rem 0;
-            color: #000;
+            color: #4a453e;
         }
 
         .markdown-content strong {
             font-weight: 500;
-            color: #000;
+            color: #2d2a26;
         }
 
         .markdown-content hr {
             border: none;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid #e8e4dc;
             margin: 2.5rem 0;
         }
 
@@ -278,7 +292,7 @@
         .markdown-content img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 12px;
             margin: 1.5rem 0;
         }
 
@@ -296,19 +310,19 @@
 
         .markdown-content th,
         .markdown-content td {
-            border: 1px solid #f0ede9;
+            border: 1px solid #e8e4dc;
             padding: 0.5rem 0.75rem;
             text-align: left;
         }
 
         .markdown-content th {
-            background: #f8f6f4;
+            background: #f5f2ed;
             font-weight: 500;
         }
 
         /* --- Footer --- */
         footer {
-            border-top: 1px solid #f0ede9;
+            border-top: 1px solid #e8e4dc;
             padding: 1.5rem 0;
             margin-top: 1.5rem;
         }
@@ -316,13 +330,13 @@
         footer p {
             text-align: center;
             font-size: 0.8rem;
-            color: #000;
+            color: #7a7267;
             font-weight: 400;
         }
 
         .loading {
             text-align: center;
-            color: #666;
+            color: #7a7267;
             font-style: italic;
             padding: 2rem 0;
         }
@@ -342,7 +356,7 @@
             }
 
             .research-post-title {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
             }
 
             .research-card {
@@ -397,7 +411,7 @@
     <div id="research-post" style="display: none;">
         <section class="section">
             <div class="container">
-                <a href="research" class="back-link">&larr; Back to Research</a>
+                <a href="research.html" class="back-link">&larr; Back to Research</a>
                 <h1 id="research-post-title" class="research-post-title"></h1>
                 <div id="research-post-date" class="research-post-date"></div>
                 <div id="research-post-content" class="markdown-content"></div>
