@@ -1,6 +1,6 @@
 ---
 title: Adaptive Protein Tokenization
-date: January 2025
+date: January 2026
 description: We developed a new way to represent proteins where each token provides global information about the protein structure.
 links: Demo | https://apt.rohitdilip.com, Paper | coming soon, Code | coming soon
 ---

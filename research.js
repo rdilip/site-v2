@@ -11,7 +11,8 @@
 // Front matter fields: title, date, description
 // ---------------------------
 const researchPosts = [
-  'apt.md'
+  'apt.md',
+  'kanzi.md',
 ];
 
 // ---------------------------
