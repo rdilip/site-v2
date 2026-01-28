@@ -33,7 +33,7 @@ One thing we particularly liked about this approach was it simplified the traini
 The point of a generative model is to generate proteins, not just reconstruct them. Autoregressive models trained using these tokens are capable of generating proteins -- here are some samples with the scRMSD (below 2.0 is considered a "real" generation) annotated.
 
 <p align="center">
-  <img src="research/images/kanzi_iclr_samples_w_rmsds.png" width="400">
+  <img src="research/images/kanzi_iclr_samples_w_rmsds.png" width="800">
 </p>
 
 
