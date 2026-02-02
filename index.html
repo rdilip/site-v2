@@ -232,10 +232,37 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
+            flex-shrink: 0;
+            perspective: 600px;
+            cursor: pointer;
+        }
+
+        .profile-photo-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s ease-in-out;
+            transform-style: preserve-3d;
+        }
+
+        .profile-photo.flipped .profile-photo-inner {
+            transform: rotateY(180deg);
+        }
+
+        .profile-photo-front,
+        .profile-photo-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            backface-visibility: hidden;
             background: #f8f6f4;
             border: 1px solid #f0ede9;
-            flex-shrink: 0;
-            overflow: hidden;
+        }
+
+        .profile-photo-back {
+            transform: rotateY(180deg);
         }
 
         .profile-photo img {
@@ -617,9 +644,17 @@
                             </a>
                         </div>
                     </div>
-                    <div class="profile-photo">
-                        <img src="assets/profile.jpg" title="I promise I am usually smiling."
-                            alt="I promise I am usually smiling.">
+                    <div class="profile-photo" onclick="this.classList.toggle('flipped')">
+                        <div class="profile-photo-inner">
+                            <div class="profile-photo-front">
+                                <img src="assets/profile.jpg" title="I promise I am usually smiling."
+                                    alt="I promise I am usually smiling.">
+                            </div>
+                            <div class="profile-photo-back">
+                                <img src="assets/ghibli_headshot.png" title="ChatGPT making me much more handsome"
+                                    alt="ChatGPT making me much more handsome">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
