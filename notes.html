@@ -3,9 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notes — Rohit Dilip</title>
+  <title>Scales — Rohit Dilip</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .scales-intro { margin-bottom: 2rem; }
+    .scales-quote {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: var(--text);
+      margin: 1.5rem 0;
+      padding-left: 1.25rem;
+      border-left: 3px solid var(--border);
+      line-height: 1.5;
+    }
+    .scales-quote .attribution {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-style: normal;
+    }
+    .scales-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 600px;
+    }
+    .pdf-embed {
+      width: 100%;
+      height: 600px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-top: 1rem;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -15,7 +48,7 @@
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="research.html">Research</a></li>
-          <li><a href="notes.html" class="active">Notes</a></li>
+          <li><a href="notes.html" class="active">Scales</a></li>
         </ul>
       </nav>
     </div>
@@ -24,8 +57,23 @@
   <main>
     <section class="section">
       <div class="container">
-        <h2 class="section-title">Notes</h2>
+        <h2 class="section-title">Scales</h2>
+
+        <div class="scales-intro">
+          <blockquote class="scales-quote">
+            "Athletes train. Musicians train. Performers train. But knowledge workers don't."
+            <span class="attribution">— <a href="https://marginalrevolution.com/marginalrevolution/2019/07/learn-like-an-athlete-knowledge-workers-should-train.html">David Perell</a></span>
+          </blockquote>
+          <p class="scales-description">Scales are short form notes I write on topics I've learned previously. I'm uploading them here as a form of accountability. Some of these may be typed up, and some may be handwritten notes. The goal is to continuously and iteratively reinforce topics I've studied but don't reach for on a daily basis.</p>
+        </div>
+
         <div class="card-list">
+
+          <a href="posts/kl.html" class="card">
+            <div class="card-title">KL Divergence</div>
+            <div class="card-date">May 2026</div>
+            <div class="card-description">Handwritten notes on KL divergence.</div>
+          </a>
 
           <a href="posts/fdiv.html" class="card">
             <div class="card-title">The Dreaded F-word</div>
