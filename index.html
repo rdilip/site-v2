@@ -1,808 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rohit Dilip</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <div id="bio" class="container" style="display:none;">
-        Some important facts about Rohit that are critical to understanding his work: he is a self-appointed world
-        champion in Harry Potter trivia and can name a Hamiltonian path through the countries of every continent.
-    </div>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.5;
-            color: #000;
-            background: #fefcfb;
-            font-size: 15px;
-            letter-spacing: -0.01em;
-        }
-
-        .post-title:hover {
-            color: #2563eb;
-        }
-
-        .post-title button:hover span.triangle {
-            transform: rotate(90deg);
-        }
-
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        .post-title button {
-            text-decoration: none;
-        }
-
-        .post-title button:hover {
-            text-decoration: underline;
-        }
-
-        /* --- Blog post hover + expand aesthetic --- */
-
-        /* Compact row: make the title button feel click-ready */
-        .post-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.15rem 0;
-            transition: color 0.2s ease, background 0.2s ease;
-            border-radius: 6px;
-        }
-
-        /* Default text + arrow */
-        .post-toggle span.triangle {
-            color: #666;
-            transition: transform 0.25s ease, color 0.25s ease;
-        }
-
-        /* Hover feedback: soft blue tint + darker text */
-        .post-toggle:hover {
-            color: #1d4ed8;
-            /* slightly deeper blue */
-            background: rgba(37, 99, 235, 0.06);
-        }
-
-        .post-toggle:hover span.triangle {
-            color: #2563eb;
-            transform: translateX(2px);
-        }
-
-        /* Expanded state: blue accent + rotated triangle */
-        .post-toggle[aria-expanded="true"] {
-            color: #1e40af;
-            /* deep blue */
-            font-weight: 500;
-        }
-
-        .post-toggle[aria-expanded="true"] span.triangle {
-            /* color: #2563eb; */
-            transform: rotate(90deg);
-        }
-
-
-
-        header {
-            border-bottom: 1px solid #f0ede9;
-            background: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 0;
-        }
-
-        .markdown-content .katex-display {
-            margin: 1rem 0;
-        }
-
-
-        .logo {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #000;
-            letter-spacing: -0.02em;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #666;
-            font-size: 0.9rem;
-            font-weight: 400;
-            transition: color 0.2s;
-            letter-spacing: -0.01em;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #000;
-        }
-
-        .intro {
-            padding: 1.5rem 0;
-            border-bottom: 1px solid #f0ede9;
-            background: #fff;
-        }
-
-        .intro-content {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .intro-text {
-            flex: 1;
-        }
-
-        .intro h1 {
-            font-size: 1.6rem;
-            font-weight: 500;
-            color: #000;
-            margin-bottom: 0.3rem;
-            letter-spacing: -0.02em;
-        }
-
-        .intro .subtitle {
-            font-size: 0.95rem;
-            color: #000;
-            margin-bottom: 0.8rem;
-            font-weight: 400;
-            line-height: 1.5;
-        }
-
-        .intro .subtitle a {
-            color: #2563eb;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .intro .subtitle a:hover {
-            color: #1d4ed8;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 0.8rem;
-            align-items: center;
-        }
-
-        .social-links a {
-            color: #666;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-        }
-
-        .social-links a:hover {
-            color: #000;
-        }
-
-        .social-links a.github:hover {
-            color: #333;
-        }
-
-        .social-links a.linkedin:hover {
-            color: #0077b5;
-        }
-
-        .social-links a.google-scholar:hover {
-            color: #4285f4;
-        }
-
-        .social-links a.twitter:hover {
-            color: #000;
-        }
-
-        .social-links a.email:hover {
-            color: #ea4335;
-        }
-
-        .profile-photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            perspective: 600px;
-            cursor: pointer;
-        }
-
-        .profile-photo-inner {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transition: transform 0.6s ease-in-out;
-            transform-style: preserve-3d;
-        }
-
-        .profile-photo.flipped .profile-photo-inner {
-            transform: rotateY(180deg);
-        }
-
-        .profile-photo-front,
-        .profile-photo-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            backface-visibility: hidden;
-            background: #f8f6f4;
-            border: 1px solid #f0ede9;
-        }
-
-        .profile-photo-back {
-            transform: rotateY(180deg);
-        }
-
-        .profile-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .profile-photo-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            color: #666;
-            font-weight: 400;
-        }
-
-        .section {
-            padding: 2rem 0;
-        }
-
-        .section:not(:last-child) {
-            border-bottom: 1px solid #f0ede9;
-        }
-
-        .section h2 {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #000;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.01em;
-        }
-
-        .about {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #000;
-            max-width: 650px;
-            font-weight: 400;
-        }
-
-        .papers {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .paper {
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #f8f6f4;
-        }
-
-        .paper:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .paper h3 {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #000;
-            margin-bottom: 0.3rem;
-            line-height: 1.4;
-            letter-spacing: -0.01em;
-        }
-
-        .paper h3 a {
-            color: #2563eb;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .paper h3 a:hover {
-            color: #1d4ed8;
-        }
-
-        .paper .authors {
-            font-size: 0.85rem;
-            color: #000;
-            margin-bottom: 0.2rem;
-            font-weight: 400;
-        }
-
-        .paper .venue {
-            font-size: 0.8rem;
-            color: #000;
-            margin-bottom: 0.6rem;
-            font-weight: 400;
-        }
-
-        .paper .description {
-            font-size: 0.85rem;
-            line-height: 1.5;
-            color: #000;
-            font-weight: 400;
-        }
-
-        .blog-posts {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .blog-post {
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #f8f6f4;
-        }
-
-        .blog-post:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .blog-post h3 {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #000;
-            margin-bottom: 0.2rem;
-            letter-spacing: -0.01em;
-        }
-
-        .blog-post .date {
-            font-size: 0.8rem;
-            color: #000;
-            margin-bottom: 0.8rem;
-            font-weight: 400;
-        }
-
-        .markdown-content {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #000;
-            font-weight: 400;
-        }
-
-        .markdown-content h1,
-        .markdown-content h2,
-        .markdown-content h3 {
-            color: #000;
-            font-weight: 500;
-            margin: 1.2rem 0 0.6rem 0;
-            letter-spacing: -0.01em;
-        }
-
-        .markdown-content h1 {
-            font-size: 1.2rem;
-        }
-
-        .markdown-content h2 {
-            font-size: 1.1rem;
-        }
-
-        .markdown-content h3 {
-            font-size: 1rem;
-        }
-
-        .markdown-content p {
-            margin-bottom: 0.8rem;
-        }
-
-        .markdown-content ul,
-        .markdown-content ol {
-            margin: 0.8rem 0;
-            padding-left: 1.2rem;
-        }
-
-        .markdown-content li {
-            margin-bottom: 0.2rem;
-        }
-
-        .markdown-content code {
-            background: #f5f3f1;
-            padding: 0.1rem 0.1rem;
-            border-radius: 100px;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-            /* font-size: 0.3em; */
-        }
-
-        .markdown-content pre {
-            background: #f5f3f1;
-            padding: 0.8rem;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 1rem 0;
-            border: 1px solid #f0ede9;
-            font-size: 0.8rem;
-            line-height: 1.2;
-        }
-
-        .markdown-content pre code {
-            background: none;
-            padding: 0;
-        }
-
-        .markdown-content blockquote {
-            border-left: 2px solid #ddd;
-            padding-left: 0.8rem;
-            margin: 1rem 0;
-            color: #000;
-        }
-
-        .markdown-content strong {
-            font-weight: 500;
-            color: #000;
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        .loading {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 2rem 0;
-        }
-
-        footer {
-            border-top: 1px solid #f0ede9;
-            padding: 1.5rem 0;
-            margin-top: 1.5rem;
-        }
-
-        footer p {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #000;
-            font-weight: 400;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
-            .nav-links {
-                gap: 1.2rem;
-            }
-
-            .intro h1 {
-                font-size: 1.4rem;
-            }
-
-            .intro-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 1.2rem;
-            }
-
-            .profile-photo {
-                order: -1;
-                width: 100px;
-                height: 100px;
-            }
-
-            .section {
-                padding: 1.5rem 0;
-            }
-
-            .social-links {
-                gap: 0.6rem;
-            }
-        }
-
-        .badge-row {
-            display: flex;
-            gap: 0.5rem;
-            /* space between badges */
-            margin: 0.5rem 0;
-            /* space above/below the row */
-        }
-
-        .badge-row img {
-            height: 20px;
-            /* keep badges a consistent small size */
-        }
-
-        /* --- Projects section --- */
-        .project-line {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            padding: 0.4rem 0;
-            border-bottom: 1px solid #f8f6f4;
-        }
-
-        .project-line:last-child {
-            border-bottom: none;
-        }
-
-        .project-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            font-size: 0.8rem;
-            padding: 0.25rem 0.65rem;
-            border-radius: 999px;
-            border: 1px solid #e7e3df;
-            background: #f8f6f4;
-            color: #333;
-            text-decoration: none;
-            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-            vertical-align: middle;
-        }
-
-        .project-pill:hover {
-            background: #eef2ff;
-            border-color: #dbe3ff;
-            color: #1e40af;
-        }
-
-        .project-pill i {
-            font-size: 0.9rem;
-            color: currentColor;
-        }
-    </style>
-    <!-- Markdown parser + sanitizer -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
-    <!-- Your blog logic -->
-    <script src="blog.js" defer></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohit Dilip</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">Rohit Dilip</div>
-                <ul class="nav-links">
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="research.html">Research</a></li>
-                    <li><a href="notes.html">Notes</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <div id="home" class="page active">
-        <section class="intro">
-            <div class="container">
-                <div class="intro-content">
-                    <div class="intro-text">
-                        <h1>Rohit Dilip</h1>
-                        <div class="subtitle">
-                            I research generative modeling for biology at Caltech. Recently, I've worked on using <a
-                                href="assets/kanzi_all_authors.pdf" target="_blank">flow matching to develop scalable
-                                tokenizers</a> and <a href="assets/jovian.pdf" target="_blank">generating new biological
-                                structures using autoregressive models</a>. Before grad school, I studied quantum
-                            information at TUM and got my bachelor's degree in physics from Princeton. I'm also a
-                            co-organizer of <a href="https://projectsynapse.org" target="_blank">Project Synapse.</a>
-                        </div>
-                        <div class="social-links">
-                            <a href="https://github.com/rdilip" target="_blank" title="GitHub" class="github">
-                                <i class="fa-brands fa-github"></i>
-                            </a>
-                            <a href="https://linkedin.com/in/rohitdilip" target="_blank" title="LinkedIn"
-                                class="linkedin">
-                                <i class="fa-brands fa-linkedin"></i>
-                            </a>
-                            <a href="https://twitter.com/rohitdilip8" target="_blank" title="Twitter" class="twitter">
-                                <i class="fa-brands fa-twitter"></i>
-                            </a>
-                            <a href="https://scholar.google.com/citations?user=c7UrOc4AAAAJ" target="_blank"
-                                title="Google Scholar" class="google-scholar">
-                                <i class="fa-solid fa-book"></i>
-                            </a>
-                            <a href="mailto:rdilip@caltech.edu" target="_blank" title="Email" class="email">
-                                <i class="fa-solid fa-envelope"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="profile-photo" onclick="this.classList.toggle('flipped')">
-                        <div class="profile-photo-inner">
-                            <div class="profile-photo-front">
-                                <img src="assets/profile.jpg" title="I promise I am usually smiling."
-                                    alt="I promise I am usually smiling.">
-                            </div>
-                            <div class="profile-photo-back">
-                                <img src="assets/ghibli_headshot.png" title="ChatGPT making me much more handsome"
-                                    alt="ChatGPT making me much more handsome">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="section" id="projects">
-            <div class="container">
-                <h2>Projects</h2>
-                <div class="project-line">
-                    <a href="https://github.com/rdilip/picomap" target="_blank" class="project-pill">
-                        <i class="fa-brands fa-github"></i> <strong>picomap</strong>
-                    </a> Easy dataloading for machine learning
-                </div>
-            </div>
-        </section>
-
-
-
-
-        <section class="section">
-            <div class="container">
-                <h2>Recent Publications</h2>
-                <div class="papers">
-                    <div class="paper">
-                        <h3><a href="assets/kanzi_all_authors.pdf" target="_blank">Kanzi: Flow Autoencoders are
-                                Effective Protein Tokenizers</a></h3>
-                        <div class="authors">Rohit Dilip, Evan Zhang, Ayush Varshney, David Van Valen</div>
-                        <div class="badge-row">
-                            <a href="https://arxiv.org/abs/2510.00351" target="_blank">
-                                <img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv">
-                            </a>
-                            <a href="https://www.biorxiv.org/content/10.1101/2025.10.01.679645v1" target="_blank">
-                                <img src="https://img.shields.io/badge/bioRxiv-2025.10.01.679645-4caf50.svg"
-                                    alt="bioRxiv">
-                            </a>
-                            <a href="https://github.com/rdilip/kanzi" target="_blank">
-                                <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
-                            </a>
-                        </div>
-                        <div class="description">
-                            We develop a flow matching based autoencoder for protein structure tokenization. Kanzi
-                            outperforms 20x larger models trained on 400x as much data.
-                        </div>
-
-                    </div>
-
-                    <div class="paper">
-                        <h3><a href="assets/jovian.pdf" target="_blank">Jovian: Bidirectional Autoregressive Protein
-                                Structure Generation</a></h3>
-                        <div class="authors">Rohit Dilip, Ayush Varshney, Evan Zhang, David Van Valen</div>
-                        <div class="description">
-                            Jovian presents an autoregressive approach to condition generative models on particular
-                            substructures.
-                        </div>
-                    </div>
-
-                    <div class="paper">
-                        <h3><a href="https://www.biorxiv.org/content/10.1101/2023.11.17.567630v5.full.pdf"
-                                target="_blank">CellSAM: A Foundation Model for Cell Segmentation</a></h3>
-                        <div class="authors">Uriah Israel, Markus Marks, Rohit Dilip, Qilin Li, et al.</div>
-                        <!-- <div class="venue">Submitted, 2025</div> -->
-                        <div class="badge-row">
-                            <a href="https://arxiv.org/abs/2311.11004" target="_blank">
-                                <img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv">
-                            </a>
-                            <a href="https://www.biorxiv.org/content/10.1101/2023.11.17.567630v5" target="_blank">
-                                <img src="https://img.shields.io/badge/bioRxiv-2023.11.17.567630-4caf50.svg"
-                                    alt="bioRxiv">
-                            </a>
-                            <a href="https://github.com/vanvalenlab/CellSAM" target="_blank">
-                                <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
-                            </a>
-                        </div>
-
-                        <div class="description">
-                            CellSAM is a generalist model for cell segmentation that works across visual modalities,
-                            sizes, and shapes.
-                        </div>
-                    </div>
-
-                    <div class="paper">
-                        <h3><a href="https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.4.043007"
-                                target="_blank">Data compression for quantum machine learning</a></h3>
-                        <div class="authors">Rohit Dilip, Leo Li, Adam Smith, Frank Pollmann</div>
-                        <div class="venue">Physical Review Research, 2023</div>
-                        <div class="badge-row">
-                            <a href="https://arxiv.org/abs/2204.11170" target="_blank">
-                                <img src="https://img.shields.io/badge/arXiv-2204.11170-b31b1b.svg" alt="arXiv">
-                            </a>
-                            <a href="https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.4.043007"
-                                target="_blank">
-                                <img src="https://img.shields.io/badge/PhysRevResearch-2023-blue.svg"
-                                    alt="Physical Review Research">
-                            </a>
-                            <a href="https://github.com/rdilip/qml.git" target="_blank">
-                                <img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub">
-                            </a>
-
-                        </div>
-                        <div class="description">
-                            We develop a tensor-network based data compression technique specifically for exploitation
-                            on low-depth quantum circuits.
-                        </div>
-                    </div>
-
-                    <div class="paper">
-                        <h3><a href="https://journals.aps.org/prxquantum/pdf/10.1103/PRXQuantum.2.010342"
-                                target="_blank">Real- and imaginary-time evolution with compressed quantum circuits</a>
-                        </h3>
-                        <div class="authors">ShengHsuan Lin, Rohit Dilip, Adam Smith, Frank Pollmann</div>
-                        <div class="venue">PRX Quantum</div>
-                        <div class="badge-row">
-                            <a href="https://arxiv.org/abs/2008.10322" target="_blank">
-                                <img src="https://img.shields.io/badge/arXiv-2008.10322-b31b1b.svg" alt="arXiv">
-                            </a>
-                            <a href="https://journals.aps.org/prxquantum/abstract/10.1103/PRXQuantum.2.010342"
-                                target="_blank">
-                                <img src="https://img.shields.io/badge/PRXQuantum-2022-blue.svg" alt="PRX Quantum">
-                            </a>
-                        </div>
-                        <div class="description">
-                            We show that low depth classical simulations of quantum circuits can be used to simulate
-                            non-equilibrium quantum dynamics.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo"><a href="index.html">Rohit Dilip</a></div>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="research.html">Research</a></li>
+          <li><a href="notes.html">Notes</a></li>
+        </ul>
+      </nav>
     </div>
+  </header>
 
-    <div id="blog" class="page">
-        <section class="section">
-            <div class="container">
-                <h2>Research Notes</h2>
-
-                <div id="blog-posts" class="blog-posts">
-                    <div class="loading">Loading posts...</div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Rohit Dilip</p>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Rohit Dilip</h1>
+          <p class="hero-bio">
+            I research generative modeling for biology at Caltech. Recently, I've worked on using
+            <a href="assets/kanzi_all_authors.pdf" target="_blank">flow matching to develop scalable tokenizers</a> and
+            <a href="assets/jovian.pdf" target="_blank">generating new biological structures using autoregressive models</a>.
+            Before grad school, I studied quantum information at TUM and got my bachelor's degree in physics from Princeton.
+            I'm also a co-organizer of <a href="https://projectsynapse.org" target="_blank">Project Synapse</a>.
+          </p>
+          <div class="social-links">
+            <a href="https://github.com/rdilip" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a href="https://linkedin.com/in/rohitdilip" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://twitter.com/rohitdilip8" target="_blank" title="Twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://scholar.google.com/citations?user=c7UrOc4AAAAJ" target="_blank" title="Google Scholar"><i class="fa-solid fa-book"></i></a>
+            <a href="mailto:rdilip@caltech.edu" target="_blank" title="Email"><i class="fa-solid fa-envelope"></i></a>
+          </div>
         </div>
-    </footer>
+        <div class="profile-photo" onclick="this.classList.toggle('flipped')">
+          <div class="profile-photo-inner">
+            <div class="profile-photo-front">
+              <img src="assets/profile.jpg" alt="Rohit Dilip">
+            </div>
+            <div class="profile-photo-back">
+              <img src="assets/ghibli_headshot.png" alt="Ghibli-style portrait">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <main>
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="project-item">
+          <a href="https://github.com/rdilip/picomap" target="_blank" class="project-pill">
+            <i class="fa-brands fa-github"></i> <strong>picomap</strong>
+          </a> Easy dataloading for machine learning
+        </div>
+      </div>
+    </section>
 
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Publications</h2>
+
+        <div class="pub-card">
+          <div class="pub-title"><a href="https://arxiv.org/abs/2602.06418" target="_blank">Adaptive Protein Tokenization (ICML 2026)</a></div>
+          <div class="pub-authors">Rohit Dilip, Evan Zhang, Ayush Varshney, David Van Valen</div>
+          <div class="badge-row">
+            <a href="https://arxiv.org/abs/2602.06418" target="_blank"><img src="https://img.shields.io/badge/arXiv-2602.06418-b31b1b.svg" alt="arXiv"></a>
+            <a href="https://github.com/rdilip/apt" target="_blank"><img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub"></a>
+          </div>
+          <div class="pub-description">We develop a new way to represent proteins where each token provides global information about the protein structure.</div>
+        </div>
+
+        <div class="pub-card">
+          <div class="pub-title"><a href="assets/kanzi_all_authors.pdf" target="_blank">Kanzi: Flow Autoencoders are Effective Protein Tokenizers (ICLR 2026)</a></div>
+          <div class="pub-authors">Rohit Dilip, Evan Zhang, Ayush Varshney, David Van Valen</div>
+          <div class="badge-row">
+            <a href="https://arxiv.org/abs/2510.00351" target="_blank"><img src="https://img.shields.io/badge/arXiv-2510.00351-b31b1b.svg" alt="arXiv"></a>
+            <a href="https://www.biorxiv.org/content/10.1101/2025.10.01.679645v1" target="_blank"><img src="https://img.shields.io/badge/bioRxiv-2025.10.01.679645-4caf50.svg" alt="bioRxiv"></a>
+            <a href="https://github.com/rdilip/kanzi" target="_blank"><img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub"></a>
+          </div>
+          <div class="pub-description">We develop a flow matching based autoencoder for protein structure tokenization. Kanzi outperforms 20x larger models trained on 400x as much data.</div>
+        </div>
+
+        <div class="pub-card">
+          <div class="pub-title"><a href="assets/jovian.pdf" target="_blank">Jovian: Bidirectional Autoregressive Protein Structure Generation</a></div>
+          <div class="pub-authors">Rohit Dilip, Ayush Varshney, Evan Zhang, David Van Valen</div>
+          <div class="pub-description">Jovian presents an autoregressive approach to condition generative models on particular substructures.</div>
+        </div>
+
+        <div class="pub-card">
+          <div class="pub-title"><a href="https://www.biorxiv.org/content/10.1101/2023.11.17.567630v5.full.pdf" target="_blank">CellSAM: A Foundation Model for Cell Segmentation</a></div>
+          <div class="pub-authors">Uriah Israel, Markus Marks, Rohit Dilip, Qilin Li, et al.</div>
+          <div class="badge-row">
+            <a href="https://arxiv.org/abs/2311.11004" target="_blank"><img src="https://img.shields.io/badge/arXiv-2311.11004-b31b1b.svg" alt="arXiv"></a>
+            <a href="https://github.com/vanvalenlab/CellSAM" target="_blank"><img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub"></a>
+          </div>
+          <div class="pub-description">CellSAM is a generalist model for cell segmentation that works across visual modalities, sizes, and shapes.</div>
+        </div>
+
+        <div class="pub-card">
+          <div class="pub-title"><a href="https://journals.aps.org/prresearch/pdf/10.1103/PhysRevResearch.4.043007" target="_blank">Data compression for quantum machine learning</a></div>
+          <div class="pub-authors">Rohit Dilip, Leo Li, Adam Smith, Frank Pollmann</div>
+          <div class="pub-venue">Physical Review Research, 2023</div>
+          <div class="badge-row">
+            <a href="https://arxiv.org/abs/2204.11170" target="_blank"><img src="https://img.shields.io/badge/arXiv-2204.11170-b31b1b.svg" alt="arXiv"></a>
+            <a href="https://github.com/rdilip/qml.git" target="_blank"><img src="https://img.shields.io/badge/GitHub-repo-181717.svg?logo=github" alt="GitHub"></a>
+          </div>
+          <div class="pub-description">We develop a tensor-network based data compression technique specifically for exploitation on low-depth quantum circuits.</div>
+        </div>
+
+        <div class="pub-card">
+          <div class="pub-title"><a href="https://journals.aps.org/prxquantum/pdf/10.1103/PRXQuantum.2.010342" target="_blank">Real- and imaginary-time evolution with compressed quantum circuits</a></div>
+          <div class="pub-authors">ShengHsuan Lin, Rohit Dilip, Adam Smith, Frank Pollmann</div>
+          <div class="pub-venue">PRX Quantum</div>
+          <div class="badge-row">
+            <a href="https://arxiv.org/abs/2008.10322" target="_blank"><img src="https://img.shields.io/badge/arXiv-2008.10322-b31b1b.svg" alt="arXiv"></a>
+          </div>
+          <div class="pub-description">We show that low depth classical simulations of quantum circuits can be used to simulate non-equilibrium quantum dynamics.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Rohit Dilip</p>
+    </div>
+  </footer>
 </body>
-
 </html>

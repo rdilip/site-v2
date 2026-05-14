@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exponential race trick for categorical sampling — Rohit Dilip</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo"><a href="../index.html">Rohit Dilip</a></div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../research.html">Research</a></li>
+          <li><a href="../notes.html" class="active">Notes</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="post-header">
+        <a href="../notes.html" class="post-back">&larr; Notes</a>
+        <h1 class="post-title">Exponential race trick for categorical sampling</h1>
+        <div class="post-date">October 21, 2025</div>
+      </div>
+
+      <article class="post-content">
+        <p>Here's a sampling trick I saw for the first time today. My normal pattern for autoregressive rollouts is something like</p>
+
+<pre><code>logits = model(tokens)
+probs = logits.softmax(dim=-1)
+next_idx = torch.multinomial(probs, 1)
+idx = torch.cat((idx, next_idx), dim=-1)</code></pre>
+
+        <p>This is fine, but <code>torch.multinomial</code> incurs a cuda sync, which we'd like to avoid if we're trying to do fast generation. There's a fast trick that lets us avoid the CUDA sync and do categorical sampling (mathematically equivalent to the Gumbel-max trick).</p>
+
+        <p>Let's say we have a sequence of $V$ variables $E_i\sim\text{Exp}(\lambda_i)$. We have the following fact:</p>
+
+        $$\mathbb{P}(\text{argmin}_i E_i = k) = \frac{\lambda_k}{\sum_{j}\lambda_j}$$
+
+        <p>To derive this, note that the CDF of an exponential distribution is just $1 - e^{-\lambda x}$, so $\mathbb{P}(E_i > x) = e^{-\lambda x}$. This immediately gives</p>
+
+        $$\begin{aligned}
+\mathbb{P}(\text{argmin}_i E_i = k) &= \int_0^\infty \lambda_k e^{-\lambda_k x}\prod_{j=1, j\neq k}^V e^{-\lambda_j x}\,dx\\
+&= \lambda_k\int_{0}^\infty \exp\left(\left(-\sum_{i=1}^V \lambda_i \right)x\right)\,dx\\
+&= \frac{\lambda_k}{\sum_{i=1}^V \lambda_i}
+\end{aligned}$$
+
+        <p>So to sample from a categorical distribution, we just generate a bunch of samples from different exponential distributions and take the argmin. Now, the other neat part is the exponential distribution has the property that if $x\sim\text{Exp}(1)$, $x/\lambda\sim\text{Exp}(\lambda)$. This means it's quite simple to sample from these different distributions. We draw a bunch of samples from Exp(1), then scale them by the logits. Explicitly, we can do something like</p>
+
+<pre><code>w = torch.empty_like(probs).exponential_(1)
+idx = torch.argmin(w / probs, dim=-1)</code></pre>
+
+        <p>The argmin has a nice interpretation of the "earliest arrival time." The important thing is it avoids the cuda sync point which helps with fast inference. It's also a bit cheaper than the gumbel-max trick, since I think you just need an exponential instead of a log and an exponential. The main reason to prefer the Gumbel-max trick is when you want differentiability; you can't differentiate through the argmin. I noticed this when looking through the <code>gpt-fast</code> repo, full credits to them.</p>
+
+
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Rohit Dilip</p>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+      ],
+      throwOnError: false
+    });
+  });
+  </script>
+</body>
+</html>

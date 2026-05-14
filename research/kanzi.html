@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Autoencoders are Effective Protein Tokenizers — Rohit Dilip</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo"><a href="../index.html">Rohit Dilip</a></div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../research.html" class="active">Research</a></li>
+          <li><a href="../notes.html">Notes</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="post-header">
+        <a href="../research.html" class="post-back">&larr; Research</a>
+        <h1 class="post-title">Flow Autoencoders are Effective Protein Tokenizers</h1>
+        <div class="post-date">December 2025</div>
+      </div>
+
+      <div class="research-links">
+        <a href="https://www.kanzi.rohitdilip.com" target="_blank" class="research-pill"><i class="fa-solid fa-arrow-up-right-from-square"></i> Demo</a>
+        <a href="https://arxiv.org/abs/2510.00351" target="_blank" class="research-pill"><i class="fa-solid fa-file-lines"></i> Paper</a>
+        <a href="https://github.com/rdilip/kanzi" target="_blank" class="research-pill"><i class="fa-brands fa-github"></i> Code</a>
+      </div>
+
+      <article class="post-content">
+        <p><em>I recommend skimming <a href="../notes.html">the notes page</a> for a more general introduction to generative biology.</em></p>
+
+        <p>One view of multimodal intelligence says that we are really good at making language models, so if we can just make other data modalities "look" like language, we can train models that can understand everything from images to video to proteins. Believers in this philosophy pursue tokenization, which compresses continuous data to discrete tokens that language models can consume. This strategy has been particularly successful in biology, where multimodal models like ESM3 [1] and DPLM2 [2] learn to fuse different data modalities. This may mean predicting a protein sequence from its structure, a structure from a sequence, generating a protein with desired properties expressed through text, etc.</p>
+
+        <p>The defining feature of successful machine learning is <em>scalability</em>. Good machine learning models use architectures that can learn from large amounts of data. Unfortunately, this hasn't been the trend for most foundation models in biology. ESM3 and DPLM2 both use somewhat finicky architectures. The main reason why is if you take a protein and rotate or translate it, you still have basically the same protein, so the argument goes that our networks should be naturally invariant to rotations and translations.</p>
+
+        <p>This work takes a different approach. We train encoders that <em>learn</em> rotational symmetries from data. This is pretty simple to do -- we use a transformer, randomly rotate the input protein, then use the resulting representations to condition a diffusion decoder. The diffusion decoder is trained with a flow matching loss. Because we need to integrate a trajectory to sample the diffusion decoder, it takes us much longer to decode a protein. On the other hand, we can train very efficiently on large amounts of data and we can learn to respect rotations without requiring very bespoke architectures.</p>
+
+        <p>This works very well. First, let's look at our reconstruction performance compared to other models.</p>
+
+        <figure><img src="images/kanzi_iclr_model_size.png" alt="Model size comparison" style="max-width: 400px; margin: 0 auto;"></figure>
+
+        <p>The x-axis is performance, smaller is better. The y-axis is dataset size, and the radius of each model is roughly the the number of parameters. Our approach (Kanzi) performs better when trained on less data and with much smaller model parameter counts than most other methods, including models from frontier biology labs like ESM and DPLM.</p>
+
+        <p>One thing we particularly liked about this approach was it simplified the training pipeline. We've listed out some other methods with their loss functions below. Kanzi just needs a single diffusion loss, instead of a bunch of losses combined.</p>
+
+        <figure><img src="images/kanzi_iclr_comparison.png" alt="Loss function comparison" style="max-width: 400px; margin: 0 auto;"></figure>
+
+        <p>The point of a generative model is to generate proteins, not just reconstruct them. Autoregressive models trained using these tokens are capable of generating proteins -- here are some samples with the scRMSD (below 2.0 is considered a "real" generation) annotated.</p>
+
+        <figure><img src="images/kanzi_iclr_samples_w_rmsds.png" alt="Generated protein samples"></figure>
+
+        <p>These tokens have some problems -- it's hard to use them on representation learning tasks because they don't encode to an invariant representation. However, the strong reconstruction and generative performance really do seem to indicate that there's something right about this approach. Biomolecules are very sensitive to small perturbations, and diffusion provides a very effective tool to place atoms in exactly the right positions. We're excited to push this direction further.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Rohit Dilip</p>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+      ],
+      throwOnError: false
+    });
+  });
+  </script>
+</body>
+</html>

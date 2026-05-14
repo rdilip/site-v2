@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kabsch me if you can — Rohit Dilip</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo"><a href="../index.html">Rohit Dilip</a></div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="../research.html">Research</a></li>
+          <li><a href="../notes.html" class="active">Notes</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="post-header">
+        <a href="../notes.html" class="post-back">&larr; Notes</a>
+        <h1 class="post-title">Kabsch me if you can</h1>
+        <div class="post-date">October 11, 2025</div>
+      </div>
+
+      <article class="post-content">
+        <p>I use the Kabsch algorithm a lot...basically every day. Probably worth deriving it at least once!</p>
+
+        <p>The Kabsch algorithm is a way to align two point clouds. Formally, we want to minimize the root-mean square deviation (RMSD) between points $\{x_i\}, \{y_i\}$, with $x_i, y_i\in\mathbb{R}^3$. This is just</p>
+
+        $$
+        \text{RMSD} = \frac{1}{N}\sqrt{\sum_{i=1}^N (x_i - y_i)^2}
+        $$
+
+        <p>There are a bunch of reasons this can be useful, but often I'm generating a point cloud of some kind (a 3D asset, a molecule, a protein, etc.), and I don't actually care about the orientation. Having said that, I'd still like to be able to compare it to some ground truth, so I align the two and use the RMSD as one possible use of error. Some recent methods have also explored directly optimizing against the RMSD. I think this is generally a bad idea, and I'll explain why in this post.</p>
+
+        <h2>Derivation</h2>
+
+        <p>First, how do we actually do this alignment? Let's say we have our two point clouds, and to simplify things let's say they're the same size $N$. We'll write them both as data matrices $X, Y\in\mathbb{R}^{N\times 3}$. Our goal is to find a rotation matrix $R\in SO(3)$ (the group of rotations) and optimize</p>
+
+        $$
+        \begin{aligned}
+        \min_{R\in SO(3)} &\sqrt{\frac{1}{N}\sum_{i}^N(x_i - R y_i)^2} \\
+        &= \min_{R\in SO(3)} \sum_{i}^N(x_i - R y_i)^2 \\
+        &= \min_{R\in SO(3)} \sum_{ij}(X - Y R^T)_{ij}^2\\
+        &= \min_{R\in SO(3)} \Vert X - Y R^T\Vert^2_{F}
+        \end{aligned}
+        $$
+
+        <p>In the first step we ignore the factors irrelevant to minimization, in the second step we write this as a sum of the terms in a matrix, and in the third step we write this as the Frobenius norm. The third step allows us to express this as a trace, using one of the definitions of the Frobenius norm.</p>
+
+        $$
+        \begin{aligned}
+        \min_{R\in SO(3)} \Vert X - Y R^T\Vert^2_{F} &= \text{Tr}\left( (X - YR^T)^T(X-YR^T)\right)\\
+        &\rightarrow \min_{R\in SO(3)}  \text{Tr}\left( X^T X + R Y^T Y R^T - R Y^T X - X^T Y R^T \right)\\
+        &\rightarrow \min_{R\in SO(3)}  \text{Tr}\left(-2 R Y ^T X \right)\\
+        &\rightarrow \max_{R\in SO(3)}  \text{Tr}\left(R Y^T X \right)
+        \end{aligned}
+        $$
+
+        <p>We threw out the $X^T X$ and the $Y^T Y$ terms, since they don't depend on $R$ and don't affect the optimization. We combine terms using cyclicity of the trace and convert the minimum to a maximum. Now we're left with the problem of maximizing the trace over $R Y^TX$. We'll simplify this a bit further by writing $Y^T X = U\Sigma V^T$ using a singular value decomposition; then we have $\text{Tr}(RU\Sigma V^T) = \text{Tr}(V^T R U\Sigma)$.</p>
+
+        <p>Okay, now here's the main point. The first three matrices in the above trace are all orthonormal, so the combined matrix $V^T R U$ is still a rotation matrix. $\Sigma$ is diagonal and $3\times 3$, so this is the same as trying to maximize</p>
+
+        $$
+        \text{Tr}\left[
+        \tilde{R}
+        \begin{pmatrix}
+            \sigma_1 & 0 & 0\\
+            0 & \sigma_2 & 0\\
+            0 & 0 & \sigma_3\\
+        \end{pmatrix}
+        \right]
+        $$
+
+        <p><em>Any</em> rotation is going to reduce the trace. You can see this by considering that rotations preserve norms, or you can just imagine a rotation acting on $[\sigma_1, 0, 0]$. When you rotate away, the first value goes down, and the second and third values will increase. However, we only care about the first value since that's the only one involved in the trace. This argument (thanks to my officemate for pointing this out) means that $\tilde{R}$ must be the identity to maximize the previous equation. Working backward means:</p>
+
+        $$
+        \tilde{R} = I = V^T R U \Rightarrow R = V U^T
+        $$
+
+        <p>In other words, to find the optimal rotation, we just take the matrix $Y^T X$, take its SVD $Y^T X = U\Sigma V^T$, and form $R = VU^T$, which we then apply to $Y$ to find the optimal rotation. One important caveat is we should zero-center both point clouds before we do this so there is no mean difference.</p>
+
+
+        <h2>Kabsch as a loss function</h2>
+
+        <p>A number of recent works have directly used the Kabsch function to optimize generative models. I generally think this is a bad idea, for a couple of reasons I want to outline.</p>
+
+        <p>First, backpropagating through an SVD has problems. You don't have enough precision to do it in float16 (though you should probably still be doing this in float32 regardless, so this isn't a major concern). There is a degeneracy with respect to reflections (i.e., the sign of the determinant of the rotation matrix), but you can just catch that and flip it back if you start optimizing in the wrong direction. I have heard people say that it is expensive since the SVD is $O(N^3)$, but $N=3$ so I don't think that actually matters, even on backprop.</p>
+
+        <p>However, I think you <em>still</em> get bad backprop. If you have singular values that are close in magnitude, then small perturbations during optimization can flip the columns of $U$ and $V$, which is equivalent to a large change in your predicted rotation matrix. This gives large jumps in the gradient which are not great for optimization. Similarly, even though you can backprop through the SVD in PyTorch/Jax, the derivative involves terms $\propto (\sigma_i - \sigma_j)^{-1}$. As singular values get close, this causes issues in backpropagation.</p>
+
+        <p>Some more anecdotal data: I've noticed that RMSD approaches seem to often train using both local and global RMSD losses, which I suspect is because the RMSD itself is a global metric. If you differentiate through, I think it probably doesn't devote enough weight to local errors, so you can end up with conformations that are physically implausible but that have low loss, kind of like how per-pixel reconstructions aren't sufficient to get perceptually good tokenizations. This is a guess, though, and I haven't ablated this explicitly.</p>
+
+        <p>To be perfectly honest, the most critical issue in my mind is that the RMSD cannot represent multimodal (in the probability distribution sense, not the ML sense) distributions. This is why diffusion losses are nice. If we have two spatial conformations that occur with equal probability, the RMSD will just try to average them down the middle and give you something that's always wrong -- a diffusion loss lets you actually sample from the two conformations. This is an idea that Gabriele Corso first brought up in a talk on <a href="https://arxiv.org/abs/2210.01776">DiffDock</a> a few years back. Diffusion models often do better than just trying to directly optimize an MSE predictor when there are multiple plausible modes.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Rohit Dilip</p>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "$", right: "$", display: false},
+      ],
+      throwOnError: false
+    });
+  });
+  </script>
+</body>
+</html>

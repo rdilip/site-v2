@@ -16,23 +16,16 @@ const researchPosts = [
 ];
 
 // ---------------------------
-// Marked config (highlight.js integration)
+// Marked config
 // ---------------------------
 try {
-  if (window.marked && window.hljs) {
-    marked.setOptions({
-      gfm: true,
-      breaks: false,
-      highlight: function (code, lang) {
-        if (lang && hljs.getLanguage(lang)) {
-          return hljs.highlight(code, { language: lang }).value;
-        }
-        return hljs.highlightAuto(code).value;
-      }
-    });
+  if (window.marked && marked.use) {
+    marked.use({ gfm: true, breaks: false });
+  } else if (window.marked && marked.setOptions) {
+    marked.setOptions({ gfm: true, breaks: false });
   }
 } catch (e) {
-  console.warn('marked.setOptions error (non-fatal):', e);
+  console.warn('marked config error (non-fatal):', e);
 }
 
 // ---------------------------
@@ -200,7 +193,8 @@ async function loadResearchPost(slug) {
     const { md: mdClean, blocks } = extractBlockMath(body);
 
     // Markdown → HTML → sanitize
-    const html = DOMPurify.sanitize(marked.parse(mdClean));
+    const parseMd = marked.parse || marked;
+    const html = DOMPurify.sanitize(parseMd(mdClean));
 
     if (contentEl) {
       contentEl.innerHTML = html;
@@ -217,7 +211,7 @@ async function loadResearchPost(slug) {
   } catch (err) {
     console.error('Error loading research post:', err);
     if (contentEl) {
-      contentEl.innerHTML = '<p>Could not load this research post.</p>';
+      contentEl.innerHTML = `<p>Could not load this research post.</p><p style="font-size:0.8rem;color:var(--text-muted);">Error: ${err.message}. If you're opening this file directly, try serving it with a local server (e.g., <code>python3 -m http.server</code>).</p>`;
     }
   }
 }
@@ -230,41 +224,4 @@ async function loadResearchListing() {
   const postView = document.getElementById('research-post');
   if (listingView) listingView.style.display = 'block';
   if (postView) postView.style.display = 'none';
-
-  const container = document.getElementById('research-cards');
-  if (!container) return;
-
-  if (researchPosts.length === 0) {
-    container.innerHTML = '<p class="no-posts">Research writeups coming soon.</p>';
-    return;
-  }
-
-  container.innerHTML = '';
-
-  for (const file of researchPosts) {
-    try {
-      const res = await fetch(`./research/${file}`, { cache: 'no-store' });
-      if (!res.ok) continue;
-      const mdRaw = await res.text();
-      const { meta } = parseFrontMatter(mdRaw);
-
-      const slug = file.replace(/\.md$/, '');
-      const title = (meta.title && meta.title.trim()) || slug.replace(/[-_]/g, ' ');
-      const date = (meta.date && meta.date.trim()) || '';
-      const description = (meta.description && meta.description.trim()) || '';
-
-      const card = document.createElement('a');
-      card.href = `?post=${slug}`;
-      card.className = 'research-card';
-      card.innerHTML = `
-        <h3>${title}</h3>
-        ${date ? `<div class="research-card-date">${date}</div>` : ''}
-        ${description ? `<p class="research-card-desc">${description}</p>` : ''}
-        <span class="research-card-link">Read more \u2192</span>
-      `;
-      container.appendChild(card);
-    } catch (err) {
-      console.warn(`Error loading ${file}:`, err);
-    }
-  }
 }
