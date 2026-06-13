@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,10 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    .scales-intro { margin-bottom: 2rem; }
+    .scales-intro {
+      margin-bottom: 2rem;
+    }
+
     .scales-quote {
       font-family: var(--font-heading);
       font-size: 1.1rem;
@@ -17,6 +21,7 @@
       border-left: 3px solid var(--border);
       line-height: 1.5;
     }
+
     .scales-quote .attribution {
       display: block;
       font-family: var(--font-body);
@@ -25,12 +30,14 @@
       margin-top: 0.5rem;
       font-style: normal;
     }
+
     .scales-description {
       font-size: 0.9rem;
       color: var(--text-secondary);
       line-height: 1.7;
       max-width: 600px;
     }
+
     .pdf-embed {
       width: 100%;
       height: 600px;
@@ -40,6 +47,7 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div class="container">
@@ -62,12 +70,24 @@
         <div class="scales-intro">
           <blockquote class="scales-quote">
             "Athletes train. Musicians train. Performers train. But knowledge workers don't."
-            <span class="attribution">— <a href="https://marginalrevolution.com/marginalrevolution/2019/07/learn-like-an-athlete-knowledge-workers-should-train.html">David Perell</a></span>
+            <span class="attribution">— <a
+                href="https://marginalrevolution.com/marginalrevolution/2019/07/learn-like-an-athlete-knowledge-workers-should-train.html">David
+                Perell</a></span>
           </blockquote>
-          <p class="scales-description">Scales are short form notes I write on topics I've learned previously. I'm uploading them here as a form of accountability. Some of these may be typed up, and some may be handwritten notes. The goal is to continuously and iteratively reinforce topics I've studied but don't reach for on a daily basis.</p>
+          <p class="scales-description">Scales are short form notes I write on topics I've learned previously. I'm
+            uploading them here as a form of accountability. Some of these may be typed up, and some may be handwritten
+            notes. The goal is to continuously and iteratively reinforce topics I've studied but don't reach for on a
+            daily basis.</p>
         </div>
 
         <div class="card-list">
+          <a href="post.html?p=061224_tarflow" class="card">
+            <div class="card-title">Tarflow</div>
+            <div class="card-date">June 12, 2024</div>
+            <div class="card-description">Normalizing flows, demystified — what
+              TARFlow actually does.</div>
+          </a>
+
 
           <a href="posts/kl.html" class="card">
             <div class="card-title">KL Divergence</div>
@@ -75,46 +95,51 @@
             <div class="card-description">Handwritten notes on KL divergence.</div>
           </a>
 
-          <a href="posts/fdiv.html" class="card">
+          <!-- <a href="post.html?p=11012025_fdiv" class="card">
             <div class="card-title">The Dreaded F-word</div>
             <div class="card-date">November 1, 2025</div>
-            <div class="card-description">F-divergences, Fenchel duality, and how variational bounds connect to GANs.</div>
-          </a>
+            <div class="card-description">F-divergences, Fenchel duality, and how variational bounds connect to GANs.
+            </div>
+          </a> -->
 
-          <a href="posts/gumbel.html" class="card">
+          <a href="post.html?p=10212025_gumbel" class="card">
             <div class="card-title">Exponential race trick for categorical sampling</div>
             <div class="card-date">October 21, 2025</div>
-            <div class="card-description">A fast, CUDA-sync-free sampling trick using exponential random variables.</div>
+            <div class="card-description">A fast, CUDA-sync-free sampling trick using exponential random variables.
+            </div>
           </a>
 
-          <a href="posts/j2.html" class="card">
+          <a href="post.html?p=10172025_j2" class="card">
             <div class="card-title">Proceedings of Dead Ends: tokenizer-free autoregressive models</div>
             <div class="card-date">October 17, 2025</div>
-            <div class="card-description">A failed but instructive approach to autoregressive protein generation without tokenization.</div>
+            <div class="card-description">A failed but instructive approach to autoregressive protein generation without
+              tokenization.</div>
           </a>
 
-          <a href="posts/kabsch.html" class="card">
+          <a href="post.html?p=10112025_kabsch" class="card">
             <div class="card-title">Kabsch me if you can</div>
             <div class="card-date">October 11, 2025</div>
             <div class="card-description">Deriving the Kabsch algorithm and why RMSD makes a poor loss function.</div>
           </a>
 
-          <a href="posts/raw_coord_precision.html" class="card">
+          <a href="post.html?p=10102025_raw_coord_precision" class="card">
             <div class="card-title">Coordinates need the full float32</div>
             <div class="card-date">October 10, 2025</div>
-            <div class="card-description">Why bfloat16 precision causes training instabilities for coordinate-based networks.</div>
+            <div class="card-description">Why bfloat16 precision causes training instabilities for coordinate-based
+              networks.</div>
           </a>
 
-          <a href="posts/intro_genbio.html" class="card">
+          <a href="post.html?p=10052025_intro_genbio" class="card">
             <div class="card-title">A very quick intro to generative biology</div>
             <div class="card-date">October 5, 2025</div>
             <div class="card-description">Proteins, folding, and the landscape of generative structure modeling.</div>
           </a>
 
-          <a href="posts/everything_ode.html" class="card">
+          <a href="post.html?p=100425_everything_ode" class="card">
             <div class="card-title">Everything is an ODE</div>
             <div class="card-date">October 5, 2025</div>
-            <div class="card-description">Diffusion models as parameter-efficient ODEs, and why Kanzi works with only 30M params.</div>
+            <div class="card-description">Diffusion models as parameter-efficient ODEs, and why Kanzi works with only
+              30M params.</div>
           </a>
 
         </div>
@@ -128,4 +153,5 @@
     </div>
   </footer>
 </body>
+
 </html>

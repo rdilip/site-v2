@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rohit Dilip</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo"><a href="index.html">Rohit Dilip</a></div>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="research.html">Research</a></li>
+          <li><a href="notes.html" class="active">Scales</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="post-header">
+        <a href="notes.html" class="post-back">&larr; Scales</a>
+        <h1 class="post-title" id="post-title"></h1>
+        <div class="post-date" id="post-date"></div>
+      </div>
+      <article class="post-content" id="post-content"></article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Rohit Dilip</p>
+    </div>
+  </footer>
+
+  <script>
+    function parseFrontMatter(md) {
+      const fm = md.match(/^---\s*([\s\S]*?)\s*---\s*\n?/);
+      if (!fm) return { meta: {}, body: md };
+      const meta = {};
+      fm[1].split('\n').forEach(line => {
+        const m = line.match(/^\s*([A-Za-z0-9_-]+)\s*:\s*(.*)\s*$/);
+        if (m) meta[m[1].trim()] = m[2].trim();
+      });
+      return { meta, body: md.slice(fm[0].length) };
+    }
+
+    function extractBlockMath(md) {
+      const blocks = [];
+      let i = 0;
+      md = md.replace(/(^|[^\\])\$\$([\s\S]+?)\$\$/g, (m, pre, body) => {
+        const key = `⟪KXBLOCK:${i++}⟫`;
+        blocks.push({ key, tex: body.trim() });
+        return pre + key;
+      });
+      md = md.replace(
+        /\\begin\{(align\*?|aligned|gather\*?|equation\*?|multline\*?)\}([\s\S]+?)\\end\{\1\}/g,
+        (m, env, body) => {
+          const key = `⟪KXBLOCK:${i++}⟫`;
+          blocks.push({ key, tex: `\\begin{${env}}${body}\\end{${env}}` });
+          return key;
+        }
+      );
+      return { mdWithoutBlocks: md, blocks };
+    }
+
+    function hydrateBlockMath(el, blocks) {
+      if (!blocks.length) return;
+      let html = el.innerHTML;
+      for (const { key, tex } of blocks) {
+        html = html.split(key).join(
+          `<span class="katex-mount" data-math="${encodeURIComponent(tex)}"></span>`
+        );
+      }
+      el.innerHTML = html;
+      el.querySelectorAll('.katex-mount').forEach(m => {
+        const tex = decodeURIComponent(m.getAttribute('data-math') || '');
+        try { katex.render(tex, m, { displayMode: true, throwOnError: false }); }
+        catch (e) { m.textContent = tex; }
+      });
+    }
+
+    function renderInlineMath(el) {
+      if (typeof renderMathInElement !== 'function') return;
+      renderMathInElement(el, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true },
+        ],
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+        throwOnError: false,
+      });
+    }
+
+    async function loadPost() {
+      const params = new URLSearchParams(location.search);
+      const slug = params.get('p');
+      const titleEl = document.getElementById('post-title');
+      const dateEl = document.getElementById('post-date');
+      const contentEl = document.getElementById('post-content');
+
+      if (!slug || !/^[A-Za-z0-9_-]+$/.test(slug)) {
+        titleEl.textContent = 'Post not found';
+        return;
+      }
+
+      try {
+        const res = await fetch(`posts/${slug}.md`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const md = await res.text();
+        const { meta, body } = parseFrontMatter(md);
+
+        const title = meta.title || slug;
+        const date = meta.date || '';
+        document.title = `${title} — Rohit Dilip`;
+        titleEl.textContent = title;
+        dateEl.textContent = date;
+        if (!date) dateEl.style.display = 'none';
+
+        const { mdWithoutBlocks, blocks } = extractBlockMath(body);
+        marked.setOptions({ gfm: true, breaks: false, mangle: false, headerIds: false });
+        contentEl.innerHTML = DOMPurify.sanitize(marked.parse(mdWithoutBlocks));
+
+        hydrateBlockMath(contentEl, blocks);
+        renderInlineMath(contentEl);
+      } catch (err) {
+        titleEl.textContent = 'Post not found';
+        contentEl.innerHTML = `<p>Could not load <code>${slug}</code>: ${err.message}</p>`;
+      }
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>
