@@ -4,13 +4,138 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rohit Dilip</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=9">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <style>
+    .post-content details {
+      margin: 1.5rem 0;
+      padding: 0.75rem 1.25rem;
+      border: 1px solid var(--border, #e8e5e1);
+      border-radius: 8px;
+      background: var(--surface, #f5f3f0);
+      transition: background 0.2s ease;
+    }
+    .post-content details[open] {
+      background: var(--background, #fff);
+      padding-bottom: 1rem;
+    }
+    .post-content details > summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-family: var(--font-heading, Georgia, serif);
+      color: var(--text, #1d1d1f);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      user-select: none;
+      outline: none;
+    }
+    .post-content details > summary::-webkit-details-marker { display: none; }
+    .post-content details > summary::before {
+      content: "▸";
+      display: inline-block;
+      font-size: 0.8em;
+      color: var(--text-muted, #86868b);
+      transition: transform 0.2s ease;
+    }
+    .post-content details[open] > summary::before { transform: rotate(90deg); }
+    .post-content details > summary:hover { color: var(--accent, #2563eb); }
+    .post-content details > *:not(summary) { margin-top: 0.75rem; }
+    .post-content details > *:last-child { margin-bottom: 0; }
+
+    .post-content .tip {
+      position: relative;
+      border-bottom: 1px dotted var(--text-muted, #86868b);
+      cursor: help;
+    }
+    .post-content .tip-body {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%) translateY(4px);
+      background: #fff;
+      color: var(--text, #1d1d1f);
+      font-family: var(--font-body, system-ui, sans-serif);
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.55;
+      text-align: left;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border, #e8e5e1);
+      border-radius: 10px;
+      width: max-content;
+      max-width: 360px;
+      white-space: normal;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 10;
+    }
+    .post-content .tip-body::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-top-color: #fff;
+      filter: drop-shadow(0 1px 0 var(--border, #e8e5e1));
+    }
+    .post-content .tip-body > *:first-child { margin-top: 0; }
+    .post-content .tip-body > *:last-child { margin-bottom: 0; }
+    .post-content .tip-body p { margin: 0.5rem 0; }
+    .post-content .tip:hover .tip-body,
+    .post-content .tip:focus .tip-body,
+    .post-content .tip-body:hover {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .post-content .summary,
+    .post-content :not(details) > summary {
+      display: block;
+      margin: 2.5rem 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--surface, #f5f3f0);
+      border: 1px solid var(--border, #e8e5e1);
+      border-left: 4px solid var(--accent, #2563eb);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      font-weight: 400;
+      font-family: inherit;
+      cursor: auto;
+      list-style: none;
+    }
+    .post-content .summary::before,
+    .post-content :not(details) > summary::before {
+      content: "Summary";
+      display: block;
+      font-family: var(--font-heading, Georgia, serif);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent, #2563eb);
+      margin-bottom: 0.75rem;
+    }
+    .post-content .summary > *:first-child,
+    .post-content :not(details) > summary > *:first-child { margin-top: 0; }
+    .post-content .summary > *:last-child,
+    .post-content :not(details) > summary > *:last-child { margin-bottom: 0; }
+  </style>
 </head>
 <body>
   <header>
@@ -27,7 +152,7 @@
   </header>
 
   <main>
-    <div class="container">
+    <div class="container container--wide">
       <div class="post-header">
         <a href="notes.html" class="post-back">&larr; Scales</a>
         <h1 class="post-title" id="post-title"></h1>
@@ -132,6 +257,12 @@
         const { mdWithoutBlocks, blocks } = extractBlockMath(body);
         marked.setOptions({ gfm: true, breaks: false, mangle: false, headerIds: false });
         contentEl.innerHTML = DOMPurify.sanitize(marked.parse(mdWithoutBlocks));
+
+        if (window.hljs) {
+          contentEl.querySelectorAll('pre code').forEach(block => {
+            hljs.highlightElement(block);
+          });
+        }
 
         hydrateBlockMath(contentEl, blocks);
         renderInlineMath(contentEl);
