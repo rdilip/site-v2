@@ -3,12 +3,7 @@ title: The Fokker-Planck Equation
 date: June 20, 2026
 ---
 
-<<<<<<< HEAD
-
-The Fokker-Planck equation describes the dynamics of a probability distribution and shows up all the time in diffusion and flow matching. There are plenty of derivations online that are easy to follow but quickly turn into a bunch of algebra. This is the first one I've found where I think the main idea -- which is really quite beautiful -- comes through. Credit for this goes to the wonderful [Principles of Diffusion Models monograph](https://arxiv.org/pdf/2510.21890).
-=======
 The Fokker-Planck equation describes the dynamics of a probability distribution and shows up all the time in diffusion and flow matching. I have been searching for an intuitive derivation for a while now; the derivation I used previously appealed to test functions and evaluating moments, which works but is not very satisfying [1]. The main idea expressed in this proof is really quite beautiful. Credit for this goes to the wonderful [Principles of Diffusion Models monograph](https://arxiv.org/pdf/2510.21890).
->>>>>>> f789fe0 (update style, add conitnuity)
 
 ## The ODE case
 
