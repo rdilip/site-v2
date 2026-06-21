@@ -135,6 +135,36 @@
     .post-content :not(details) > summary > *:first-child { margin-top: 0; }
     .post-content .summary > *:last-child,
     .post-content :not(details) > summary > *:last-child { margin-bottom: 0; }
+
+    html { scroll-behavior: smooth; }
+    .post-content sup.citeref { font-size: 0.75em; line-height: 0; }
+    .post-content sup.citeref a {
+      text-decoration: none;
+      color: var(--accent, #2563eb);
+      padding: 0 0.1em;
+    }
+    .post-content sup.citeref a:hover { text-decoration: underline; }
+    .post-content .citation {
+      font-size: 0.9rem;
+      color: var(--text-secondary, #4a4a4a);
+      margin: 0.5rem 0;
+    }
+    .post-content .citation .cite-num {
+      font-weight: 600;
+      color: var(--text, #1d1d1f);
+      margin-right: 0.4em;
+    }
+    .post-content .citation .cite-back {
+      text-decoration: none;
+      color: var(--text-muted, #86868b);
+      margin-left: 0.4em;
+    }
+    .post-content .citation .cite-back:hover { color: var(--accent, #2563eb); }
+    .post-content .citation:target,
+    .post-content sup.citeref:target a {
+      background: rgba(37, 99, 235, 0.12);
+      border-radius: 3px;
+    }
   </style>
 </head>
 <body>
@@ -215,6 +245,19 @@
       });
     }
 
+    function processCitations(md) {
+      const defined = new Set();
+      md = md.replace(/^\[(\d+)\]\s+(.+)$/gm, (m, n, rest) => {
+        defined.add(n);
+        return `<p class="citation" id="cite-${n}"><span class="cite-num">[${n}]</span>${rest} <a class="cite-back" href="#citeref-${n}" title="Back to text">↩</a></p>`;
+      });
+      md = md.replace(/(^|[^\]\[\(])\[(\d+)\](?!\()/g, (m, pre, n) => {
+        if (!defined.has(n)) return m;
+        return `${pre}<sup class="citeref" id="citeref-${n}"><a href="#cite-${n}">[${n}]</a></sup>`;
+      });
+      return md;
+    }
+
     function renderInlineMath(el) {
       if (typeof renderMathInElement !== 'function') return;
       renderMathInElement(el, {
@@ -255,8 +298,9 @@
         if (!date) dateEl.style.display = 'none';
 
         const { mdWithoutBlocks, blocks } = extractBlockMath(body);
+        const mdProcessed = processCitations(mdWithoutBlocks);
         marked.setOptions({ gfm: true, breaks: false, mangle: false, headerIds: false });
-        contentEl.innerHTML = DOMPurify.sanitize(marked.parse(mdWithoutBlocks));
+        contentEl.innerHTML = DOMPurify.sanitize(marked.parse(mdProcessed));
 
         if (window.hljs) {
           contentEl.querySelectorAll('pre code').forEach(block => {
