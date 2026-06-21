@@ -3,8 +3,12 @@ title: The Fokker-Planck Equation
 date: June 20, 2026
 ---
 
+<<<<<<< HEAD
 
 The Fokker-Planck equation describes the dynamics of a probability distribution and shows up all the time in diffusion and flow matching. There are plenty of derivations online that are easy to follow but quickly turn into a bunch of algebra. This is the first one I've found where I think the main idea -- which is really quite beautiful -- comes through. Credit for this goes to the wonderful [Principles of Diffusion Models monograph](https://arxiv.org/pdf/2510.21890).
+=======
+The Fokker-Planck equation describes the dynamics of a probability distribution and shows up all the time in diffusion and flow matching. I have been searching for an intuitive derivation for a while now; the derivation I used previously appealed to test functions and evaluating moments, which works but is not very satisfying [1]. The main idea expressed in this proof is really quite beautiful. Credit for this goes to the wonderful [Principles of Diffusion Models monograph](https://arxiv.org/pdf/2510.21890).
+>>>>>>> f789fe0 (update style, add conitnuity)
 
 ## The ODE case
 
@@ -71,5 +75,10 @@ $$
 \boxed{\frac{\partial p}{\partial t} = -\nabla_\mathbf{x}\cdot\left(p_t(\mathbf{x})\mathbf{v}_t(\mathbf{x})\right)}
 $$
 
+This is exactly the continuity equation. In other words, when we have a deterministic transport map, the continuity equation is just what emerges from applying change of variables and requiring probability be conserved at every step. Another way of saying this is when I specify a particular vector field $\mathbf{v}_t(\mathbf{x})$, I have implicitly specified a sequence of distributions as particles move under that vector field, and this sequence is _enforced_ because we cannot randomly create or destroy probability. An under-appreciated fact about this equation is that we have related dynamics on individual particles (i.e., $\mathbf{v}$) to distributions, which is the whole reason generative modeling works at all!
+
+
 ## The stochastic case
 Coming soon!
+
+[1] I do have that derivation mostly typed up, so I may at some point add it so everyone can appreciate how much nicer this is. 
